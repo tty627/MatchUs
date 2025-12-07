@@ -245,3 +245,6 @@ MIT
 ## Author
 
 Created for ShanghaiTech University Campus Social Network MVP
+
+# M@CHUS
+**使命：**让每一个需求可以被即时满足  **愿景：**通过构建即时交流平台，在任何时间任何地点，组建“小圈子”、“搭子”等，解决个人或者单个群体无法解决的问题  **应用场景：**个人用户/群体用户  1）技能技术类指导；  2）陪同性陪伴性需求满足等。
