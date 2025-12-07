@@ -1,79 +1,96 @@
-# M@CHUS - Campus Social Network
+# M@CHUS - 校园社交网络
 
-A campus social network application designed for ShanghaiTech University students. The platform allows students to post events, find activity partners, and connect with fellow students through a unique "reveal mechanism" where real names are only shown after participation.
+一个面向上海科技大学学生的校园社交网络应用。平台支持学生发布活动、寻找搭子 / 小圈子，并通过独特的「实名延迟揭示机制」，在保证安全的前提下建立真实可信的连接。
 
-## Features
+## 产品使命与愿景
 
-### Core Functionality
+- **使命：**让每一个需求可以被即时满足
+- **愿景：**通过构建即时交流平台，在任何时间、任何地点，快速组建「小圈子」「搭子」等临时团队，解决个人或单个群体难以独立解决的问题
+- **应用场景示例：**
+  - 技能 / 技术类指导（如：求助学习、课程、科研相关问题）
+  - 陪伴 / 社交类需求（如：一起自习、运动、拼饭、看展等）
 
-1. **User Registration & Authentication**
-   - Email validation: Only `@shanghaitech.edu.cn` emails are accepted
-   - Secure password hashing with bcrypt
-   - JWT-based authentication
+## 核心功能
+### 1. 用户注册与登录
 
-2. **User Profile & Onboarding**
-   - Required fields: Real name (private), Nickname (public), Grade, Gender, Bio, Tags
-   - Profile must be completed before accessing the feed
-   - Real name remains private until other users participate in your posts
+- 仅支持 `@shanghaitech.edu.cn` 学校邮箱注册
+- 使用 **bcrypt** 对密码进行安全哈希存储
+- 使用 **JWT** 进行身份认证和会话管理
 
-3. **Post Feed**
-   - Create posts with content, event time, location, target people, and tags
-   - View all posts from other students
-   - Posts initially show only the author's nickname
+### 2. 个人资料与新手引导
 
-4. **Participation & Reveal Mechanism**
-   - Click "Participate" on any post to join
-   - After participating, the poster's real name is revealed to you
-   - Visual indicator showing participation status
+- 必填字段：真实姓名（私密）、昵称（公开）、年级、性别、个人简介（Bio）、标签（Tags）等
+- 未完成个人资料前无法进入主信息流（Feed）
+- 真实姓名默认对其他用户保密，仅在对方参与了你的帖子后才会显示给对方
 
-## Tech Stack
+### 3. 帖子信息流（Feed）
 
-### Backend
-- **Node.js** with **Express.js** - RESTful API server
-- **PostgreSQL** - Relational database
-- **bcrypt** - Password hashing
-- **jsonwebtoken** - JWT authentication
-- **express-validator** - Input validation
+- 发布帖子：
+  - 活动 / 需求内容
+  - 活动时间
+  - 地点
+  - 目标人数
+  - 标签（如：课程、运动、游戏、兴趣等）
+- 浏览所有同学发布的帖子
+- 帖子初始仅展示发起者的 **昵称**，不展示真实姓名
 
-### Frontend
-- **React** - UI framework
-- **React Router** - Client-side routing
-- **Vite** - Build tool and dev server
-- **Axios** - HTTP client
+### 4. 参与与实名揭示机制
 
-## Project Structure
+- 对感兴趣的帖子点击「参与」即可加入
+- 当你成功参与某个帖子后：
+  - 你可以看到该帖发起者的真实姓名
+  - 前端会展示已参与状态的可视化标记
+
+## 技术栈
+
+### 后端（Backend）
+
+- **Node.js** + **Express.js**：RESTful API 服务器
+- **PostgreSQL**：关系型数据库
+- **bcrypt**：密码哈希
+- **jsonwebtoken**：JWT 身份认证
+- **express-validator**：请求参数校验
+
+### 前端（Frontend）
+
+- **React**：前端 UI 框架
+- **React Router**：前端路由
+- **Vite**：构建工具与开发服务器
+- **Axios**：HTTP 请求客户端
+
+## 项目结构
 
 ```
 machus-campus-social/
 ├── backend/
 │   ├── config/
-│   │   └── database.js          # Database connection
+│   │   └── database.js          # 数据库连接配置
 │   ├── middleware/
-│   │   └── auth.js               # Authentication middleware
+│   │   └── auth.js              # 鉴权中间件
 │   ├── routes/
-│   │   ├── auth.js               # Authentication routes
-│   │   ├── profile.js            # Profile routes
-│   │   └── posts.js              # Posts routes
+│   │   ├── auth.js              # 认证相关路由
+│   │   ├── profile.js           # 个人资料相关路由
+│   │   └── posts.js             # 帖子相关路由
 │   ├── scripts/
-│   │   └── migrate.js            # Database migration script
-│   ├── .env.example              # Environment variables example
+│   │   └── migrate.js           # 数据库迁移脚本
+│   ├── .env.example             # 环境变量示例
 │   ├── package.json
-│   └── server.js                 # Main server file
+│   └── server.js                # 后端入口文件
 │
 ├── frontend/
 │   ├── src/
 │   │   ├── context/
-│   │   │   └── AuthContext.jsx   # Authentication context
+│   │   │   └── AuthContext.jsx  # 登录状态上下文
 │   │   ├── pages/
-│   │   │   ├── Register.jsx      # Registration page
-│   │   │   ├── Login.jsx         # Login page
-│   │   │   ├── ProfileSetup.jsx  # Profile completion page
-│   │   │   └── Feed.jsx          # Main feed page
+│   │   │   ├── Register.jsx     # 注册页
+│   │   │   ├── Login.jsx        # 登录页
+│   │   │   ├── ProfileSetup.jsx # 完善资料页
+│   │   │   └── Feed.jsx         # 主信息流页
 │   │   ├── utils/
-│   │   │   └── api.js            # API utilities
-│   │   ├── App.jsx               # Main app component
-│   │   ├── main.jsx              # React entry point
-│   │   └── index.css             # Global styles
+│   │   │   └── api.js           # API 工具封装
+│   │   ├── App.jsx              # React 根组件
+│   │   ├── main.jsx             # React 入口
+│   │   └── index.css            # 全局样式
 │   ├── index.html
 │   ├── package.json
 │   └── vite.config.js
@@ -81,125 +98,136 @@ machus-campus-social/
 └── README.md
 ```
 
-## Database Schema
+## 数据库设计
 
-### Users Table
-- `id` - Primary key
-- `email` - Unique, must end with @shanghaitech.edu.cn
-- `password_hash` - Hashed password
-- `real_name` - User's real name (private)
-- `nickname` - Public display name
-- `grade` - Student grade level
-- `gender` - User's gender
-- `bio` - Personal bio
-- `tags` - Array of interest tags
-- `profile_completed` - Boolean flag
-- `created_at` - Registration timestamp
+### users 表
 
-### Posts Table
-- `id` - Primary key
-- `user_id` - Foreign key to users
-- `content` - Post content
-- `event_time` - Optional event datetime
-- `location` - Optional location
-- `target_people` - Target number of participants
-- `tags` - Array of post tags
-- `created_at` - Post creation timestamp
+- `id`：主键
+- `email`：唯一邮箱，必须以 `@shanghaitech.edu.cn` 结尾
+- `password_hash`：加密后的密码
+- `real_name`：真实姓名（仅在参与关系成立后对特定用户可见）
+- `nickname`：昵称（公开显示）
+- `grade`：年级
+- `gender`：性别
+- `bio`：个人简介
+- `tags`：兴趣标签数组
+- `profile_completed`：是否完成资料的布尔标记
+- `created_at`：注册时间
 
-### Participations Table
-- `id` - Primary key
-- `post_id` - Foreign key to posts
-- `user_id` - Foreign key to users
-- `participated_at` - Participation timestamp
-- Unique constraint on (post_id, user_id)
+### posts 表
 
-## Setup Instructions
+- `id`：主键
+- `user_id`：发帖用户 ID（外键，对应 users.id）
+- `content`：帖子内容
+- `event_time`：可选，活动时间
+- `location`：可选，活动地点
+- `target_people`：期望参与人数
+- `tags`：帖子标签数组
+- `created_at`：发帖时间
 
-### Prerequisites
-- Node.js (v16 or higher)
-- PostgreSQL (v12 or higher)
-- npm or yarn
+### participations 表
 
-### 1. Database Setup
+- `id`：主键
+- `post_id`：帖子 ID（外键，对应 posts.id）
+- `user_id`：参与用户 ID（外键，对应 users.id）
+- `participated_at`：参与时间
+- 在 `(post_id, user_id)` 上设置唯一约束，避免同一用户重复参与同一帖子
 
-Install PostgreSQL and create a database:
+## 本地运行与环境配置
+
+### 环境依赖
+
+- Node.js（建议 v16 及以上）
+- PostgreSQL（建议 v12 及以上）
+- npm 或 yarn
+
+### 1. 数据库初始化
+
+安装 PostgreSQL 后，创建项目数据库：
 
 ```bash
-# Log into PostgreSQL
+# 使用 postgres 超级用户登录
 psql -U postgres
 
-# Create database
+# 创建数据库
 CREATE DATABASE machus_db;
 
-# Exit psql
+# 退出 psql
 \q
 ```
 
-### 2. Backend Setup
+### 2. 后端（backend）启动步骤
 
 ```bash
-# Navigate to backend directory
+# 进入后端目录
 cd backend
 
-# Install dependencies
+# 安装依赖
 npm install
 
-# Create .env file from example
+# 从示例文件创建 .env
 cp .env.example .env
 
-# Edit .env file with your database credentials
-# Update DB_PASSWORD and JWT_SECRET
+# 打开 .env，配置数据库账号、密码等
+# 重点修改：DB_PASSWORD、JWT_SECRET
 
-# Run database migration
+# 运行数据库迁移脚本
 npm run migrate
 
-# Start the backend server
+# 启动后端开发服务器
 npm run dev
 ```
 
-The backend server will run on `http://localhost:5000`
+后端默认运行在 `http://localhost:5000`。
 
-### 3. Frontend Setup
+### 3. 前端（frontend）启动步骤
 
 ```bash
-# Open a new terminal and navigate to frontend directory
+# 新开一个终端，进入前端目录
 cd frontend
 
-# Install dependencies
+# 安装依赖
 npm install
 
-# Start the development server
+# 启动前端开发服务器
 npm run dev
 ```
 
-The frontend will run on `http://localhost:3000`
+前端默认运行在 `http://localhost:3000`。
 
-## API Endpoints
+## API 接口概览
 
-### Authentication
-- `POST /api/auth/register` - Register new user
-- `POST /api/auth/login` - Login user
+### 认证（Auth）
 
-### Profile
-- `GET /api/profile/me` - Get current user profile
-- `PUT /api/profile/complete` - Complete user profile
+- `POST /api/auth/register`：用户注册
+- `POST /api/auth/login`：用户登录
 
-### Posts
-- `GET /api/posts` - Get all posts (requires profile completion)
-- `GET /api/posts/:id` - Get single post
-- `POST /api/posts` - Create new post (requires profile completion)
-- `POST /api/posts/:id/participate` - Participate in a post
+### 个人资料（Profile）
 
-## Key Implementation Details
+- `GET /api/profile/me`：获取当前登录用户的个人资料
+- `PUT /api/profile/complete`：完善 / 更新个人资料
 
-### Email Validation
-The application enforces strict email validation using regex:
+### 帖子（Posts）
+
+- `GET /api/posts`：获取所有帖子（需要先完成个人资料）
+- `GET /api/posts/:id`：获取单个帖子详情
+- `POST /api/posts`：发布新帖子（需要先完成个人资料）
+- `POST /api/posts/:id/participate`：参与某个帖子
+
+## 关键实现说明
+
+### 邮箱后缀校验
+
+系统通过正则表达式强制限制只允许使用上海科技大学邮箱注册：
+
 ```javascript
 const SHANGHAITECH_EMAIL_REGEX = /^[a-zA-Z0-9._%+-]+@shanghaitech\.edu\.cn$/;
 ```
 
-### Real Name Reveal Logic
-The backend uses SQL EXISTS to check participation status:
+### 真实姓名揭示逻辑
+
+后端通过 SQL 中的 `EXISTS` 语句判断当前用户是否已参与该帖子：
+
 ```sql
 SELECT 
   u.nickname,
@@ -212,39 +240,37 @@ FROM posts p
 JOIN users u ON p.user_id = u.id
 ```
 
-The frontend conditionally renders the real name:
+前端根据 `hasParticipated` 字段决定是否展示真实姓名：
+
 ```javascript
 {post.hasParticipated && post.author.realName && (
   <span>(Real name: {post.author.realName})</span>
 )}
 ```
 
-## Development Notes
+## 开发注意事项
 
-- The backend uses JWT tokens stored in localStorage for authentication
-- All API calls include the JWT token in the Authorization header
-- Profile completion is enforced through middleware before accessing protected routes
-- Password minimum length is 6 characters
-- All timestamps are stored in PostgreSQL TIMESTAMP format
+- 后端使用 JWT，并将 Token 存储在浏览器 `localStorage` 中
+- 所有需要登录的接口都需在 `Authorization` Header 中携带 Bearer Token
+- 访问受保护路由前，会通过中间件强制检查用户是否已完成个人资料
+- 用户密码最短长度为 6 位
+- 所有时间字段均使用 PostgreSQL 的 `TIMESTAMP` 类型存储
 
-## Future Enhancements
+## 后续可扩展方向
 
-- Direct messaging between participants
-- Post search and filtering
-- User profiles page
-- Notification system
-- Post comments
-- Image uploads
-- Email verification
-- Password reset functionality
+- 参与者之间的私信 / 聊天功能
+- 帖子搜索与多维度筛选
+- 用户公开主页 / 个人空间
+- 通知中心（参与成功、有人加入我的帖子等）
+- 帖子评论功能
+- 支持图片上传
+- 邮箱验证流程
+- 忘记密码与重置密码功能
 
 ## License
 
 MIT
 
-## Author
+## 作者与背景
 
-Created for ShanghaiTech University Campus Social Network MVP
-
-# M@CHUS
-**使命：**让每一个需求可以被即时满足  **愿景：**通过构建即时交流平台，在任何时间任何地点，组建“小圈子”、“搭子”等，解决个人或者单个群体无法解决的问题  **应用场景：**个人用户/群体用户  1）技能技术类指导；  2）陪同性陪伴性需求满足等。
+本项目为上海科技大学校园社交网络 MVP（最小可行产品）而创建，用于验证校园即时社交与搭子匹配场景的可行性。
