@@ -25,18 +25,27 @@ export const AuthProvider = ({ children }) => {
     }
   }, []);
 
-  const register = async (email, password, confirmPassword) => {
-    const response = await authAPI.register({ email, password, confirmPassword });
-    localStorage.setItem('token', response.data.token);
-    setUser(response.data.user);
+  // 注册现在仅创建账号并发送验证邮件，不会直接登录
+  const register = async (email, password, confirmPassword, avatarUrl) => {
+    const response = await authAPI.register({ email, password, confirmPassword, avatarUrl });
+    // 不保存 token，不设置 user，由用户在邮箱中点击验证链接后再登录
     return response.data;
   };
 
   const login = async (email, password) => {
     const response = await authAPI.login({ email, password });
     localStorage.setItem('token', response.data.token);
-    setUser(response.data.user);
-    return response.data;
+
+    try {
+      const profileResponse = await profileAPI.getMe();
+      const fullUser = profileResponse.data.user;
+      setUser(fullUser);
+      return { ...response.data, user: fullUser };
+    } catch (error) {
+      // Fallback: use minimal user data from auth response
+      setUser(response.data.user);
+      return response.data;
+    }
   };
 
   const logout = () => {

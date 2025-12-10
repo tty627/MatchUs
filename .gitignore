@@ -26,5 +26,9 @@ yarn-error.log*
 .DS_Store
 Thumbs.db
 
+# Uploads
+uploads/
+backend/uploads/
+
 # Testing
 coverage/
